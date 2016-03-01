@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import requests
 from flask import Flask, request, Response
 import json
 
@@ -18,14 +17,14 @@ def enable_cors(response):
 	response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 	return response
 
-@app.route('/headers')
+@app.route('/headers', methods=['GET', 'POST'])
 def headers():
 	wallet = Wallet()
 	username = Config().username
 	bitrequests = BitTransferRequests(wallet, username)
 
-	resp = requests.get(url='http://10.8.235.166:5000/payable')
-	# print(resp.headers)
+	data_dict = request.get_json()
+	resp = type('', (object,), {'headers':data_dict.get('headers'), 'url':data_dict.get('url')})()
 
 	req_headers = bitrequests.make_402_payment(resp, 200)
 	print(req_headers)
