@@ -35,4 +35,4 @@ def headers():
 	# return flask.jsonify(**req_headers)
 
 if __name__ == "__main__":
-	app.run(host='10.8.235.166', port=8080, debug=True)
+	app.run(host='0.0.0.0', port=8080, debug=True)
