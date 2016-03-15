@@ -6,6 +6,7 @@ import json
 from two1.commands.config import Config
 from two1.lib.wallet import Wallet
 from two1.lib.bitrequests import BitTransferRequests
+from two1.lib.bitrequests import ChannelRequests
 
 # Create app
 app = Flask(__name__)
@@ -16,6 +17,20 @@ def enable_cors(response):
 	response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
 	response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 	return response
+
+@app.route('/headers-channels', methods=['GET', 'POST'])
+def headers_channels():
+	wallet = Wallet()
+	username = Config().username
+	chanrequests = ChannelRequests(wallet, deposit_amount=10000)
+
+	data_dict = request.get_json()
+	resp = type('', (object,), {'headers':data_dict.get('headers'), 'url':data_dict.get('url')})()
+
+	req_headers = chanrequests.make_402_payment(resp, 200)
+	print(req_headers)
+
+	return json.dumps(req_headers)
 
 @app.route('/headers', methods=['GET', 'POST'])
 def headers():
