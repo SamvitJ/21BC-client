@@ -13,41 +13,41 @@ app = Flask(__name__)
 
 @app.after_request
 def enable_cors(response):
-	response.headers['Access-Control-Allow-Origin'] = '*'
-	response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
-	response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
-	return response
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'PUT, GET, POST, DELETE, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+    return response
 
 @app.route('/headers-channels', methods=['GET', 'POST'])
 def headers_channels():
-	wallet = Wallet()
-	username = Config().username
-	chanrequests = ChannelRequests(wallet, deposit_amount=10000)
+    wallet = Wallet()
+    username = Config().username
+    chanrequests = ChannelRequests(wallet, deposit_amount=10000)
 
-	data_dict = request.get_json()
-	resp = type('', (object,), {'headers':data_dict.get('headers'), 'url':data_dict.get('url')})()
+    data_dict = request.get_json()
+    resp = type('', (object,), {'headers':data_dict.get('headers'), 'url':data_dict.get('url')})()
 
-	req_headers = chanrequests.make_402_payment(resp, 200)
-	print(req_headers)
+    req_headers = chanrequests.make_402_payment(resp, 200)
+    print(req_headers)
 
-	return json.dumps(req_headers)
+    return json.dumps(req_headers)
 
 @app.route('/headers', methods=['GET', 'POST'])
 def headers():
-	wallet = Wallet()
-	username = Config().username
-	bitrequests = BitTransferRequests(wallet, username)
+    wallet = Wallet()
+    username = Config().username
+    bitrequests = BitTransferRequests(wallet, username)
 
-	data_dict = request.get_json()
-	resp = type('', (object,), {'headers':data_dict.get('headers'), 'url':data_dict.get('url')})()
+    data_dict = request.get_json()
+    resp = type('', (object,), {'headers':data_dict.get('headers'), 'url':data_dict.get('url')})()
 
-	req_headers = bitrequests.make_402_payment(resp, 200)
-	print(req_headers)
+    req_headers = bitrequests.make_402_payment(resp, 200)
+    print(req_headers)
 
-	return json.dumps(req_headers)
-	# return Response(json.dumps(req_headers), status=200, mimetype='application/json')
-	# return Response(response=json.dumps(req_headers), status=200, mimetype="application/json")
-	# return flask.jsonify(**req_headers)
+    return json.dumps(req_headers)
+    # return Response(json.dumps(req_headers), status=200, mimetype='application/json')
+    # return Response(response=json.dumps(req_headers), status=200, mimetype="application/json")
+    # return flask.jsonify(**req_headers)
 
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
