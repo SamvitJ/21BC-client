@@ -2,6 +2,7 @@
 import sys
 from flask import Flask, request, Response
 import json
+import subprocess
 
 from two1.commands.config import Config
 from two1.lib.wallet import Wallet
@@ -45,9 +46,19 @@ def headers():
     print(req_headers)
 
     return json.dumps(req_headers)
-    # return Response(json.dumps(req_headers), status=200, mimetype='application/json')
-    # return Response(response=json.dumps(req_headers), status=200, mimetype="application/json")
-    # return flask.jsonify(**req_headers)
+
+@app.route('/', methods=['GET', 'POST'])
+def root():
+    return """Welcome to your 21 Bitcoin Computer, a.k.a. your payment headers generator!<br/>
+           <br/>Get the status of your bitcoin wallet by making a GET request to /status.
+           <br/>Get payment headers by making a POST request to /headers, with instruction headers from the payable service included in the body of your request."""
+
+@app.route('/status')
+def status():
+    p = subprocess.Popen(['21', 'status'], stdout=subprocess.PIPE)
+    out = p.communicate()
+    print("\nGot status!")
+    return out
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True)
