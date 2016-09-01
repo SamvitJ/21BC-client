@@ -62,6 +62,6 @@ def status():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, debug=True, ssl_context=(
-        '/home/twenty-client/scripted/root-CA/server.crt',
-        '/home/twenty-client/scripted/root-CA/server.key'
+        '/home/twenty-client/certs/root-CA/server.crt',
+        '/home/twenty-client/certs/root-CA/server.key'
     ))
